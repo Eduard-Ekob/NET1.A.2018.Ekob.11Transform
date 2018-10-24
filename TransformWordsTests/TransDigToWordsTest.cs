@@ -22,13 +22,47 @@ namespace TransformWordsTests
         })]
         public string[] FilterDigitTest_TakesArrayDoublNumbers_ReturnArrayStringWords(double[] numb)
         {
-            return TransDigToWords.FilterDigit(numb);
+            var tdw = new TransDigToWords();
+            return tdw.FilterDigit(numb);
         }
 
         [Test]
         public void FilterDigitTest_With_IncommingArrayIsNull_ThrowsArgumentNullException()
         {
-            Assert.That(() => TransDigToWords.FilterDigit(null), Throws.Exception.TypeOf<ArgumentNullException>());
+            var tdw = new TransDigToWords();
+            Assert.That(() => tdw.FilterDigit(null), Throws.Exception.TypeOf<ArgumentNullException>());
         }
+
+        [Test]
+        public void Teststr()
+        {
+        double[] aktual = new [] 
+              { -255.255, 255.255, 4294967295.0, double.MinValue, double.MaxValue, double.Epsilon,
+                  double.NaN, double.NegativeInfinity, double.PositiveInfinity, -0.0, 0.0, -3576987145.45114756314,
+                  0.1245721451781456484, 1451.244457851E-12
+              };
+
+        string[] expected = new []
+            {
+                "1100000001101111111010000010100011110101110000101000111101011100",
+                "0100000001101111111010000010100011110101110000101000111101011100",
+                "0100000111101111111111111111111111111111111000000000000000000000",
+                "1111111111101111111111111111111111111111111111111111111111111111",
+                "0111111111101111111111111111111111111111111111111111111111111111",
+                "0000000000000000000000000000000000000000000000000000000000000001",
+                "1111111111111000000000000000000000000000000000000000000000000000",
+                "1111111111110000000000000000000000000000000000000000000000000000",
+                "0111111111110000000000000000000000000000000000000000000000000000",
+                "1000000000000000000000000000000000000000000000000000000000000000",
+                "0000000000000000000000000000000000000000000000000000000000000000",
+                "1100000111101010101001101000111111000001001011100110111111001101",
+                "0011111110111111111000111111010111001001100010000101111100000001",
+                "0011111000011000111011101010001111111111111110010111011110010001"
+            };
+
+            var tdw = new TransDigToWords();
+            Assert.That(() => tdw.DoubleToIEEE754(aktual), Is.EqualTo(expected));
+        }
+        
     }
 }
