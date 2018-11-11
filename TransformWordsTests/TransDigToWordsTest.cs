@@ -22,15 +22,32 @@ namespace TransformWordsTests
         })]
         public string[] FilterDigitTest_TakesArrayDoublNumbers_ReturnArrayStringWords(double[] numb)
         {
-            var tdw = new TransDigToWords();
-            return tdw.FilterDigit(numb);
+            var tdw = new TransNumbsToWords();
+            return tdw.TransformToWords(numb, new TransformDoubleToWord());
         }
+
+        [TestCase(new double[] { 12, 513 }, ExpectedResult = new string[] { "one two", "five one three" })]
+        [TestCase(new double[] { 20.17, 0 }, ExpectedResult = new string[]
+{
+            "two zero point one seven", "zero"
+})]
+        [TestCase(new double[] { -4578.164537, 39 }, ExpectedResult = new string[]
+{
+            "minus four five seven eight point one six four five three seven", "three nine"
+})]
+        public string[] FilterDigitTest_TakeArrDoublNumbersAndLogicTransform_ReturnArrayStringWords(double[] numb)
+        {
+            var tdw = new TransNumbsToWords();
+            DelTransformer dt = new TransformDoubleToWord().Transform;
+            return tdw.TransformToWords(numb, dt);
+        }
+
 
         [Test]
         public void FilterDigitTest_With_IncommingArrayIsNull_ThrowsArgumentNullException()
         {
-            var tdw = new TransDigToWords();
-            Assert.That(() => tdw.FilterDigit(null), Throws.Exception.TypeOf<ArgumentNullException>());
+            var tdw = new TransNumbsToWords();
+            Assert.That(() => tdw.TransformToWords(null, new TransformDoubleToWord()), Throws.Exception.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -60,7 +77,7 @@ namespace TransformWordsTests
                 "0011111000011000111011101010001111111111111110010111011110010001"
             };
 
-            var tdw = new TransDigToWords();
+            var tdw = new TransNumbsToWords();
             Assert.That(() => tdw.DoubleToIEEE754(aktual), Is.EqualTo(expected));
         }
         
